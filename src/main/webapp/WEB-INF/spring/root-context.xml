@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+
+<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+<!-- 데이터베이스 설정 -->
+<!-- 모든 곳에서 사용가능한 bean생성 데이터베이스 연동과 관련된 bean -->
+<!-- 데이터베이스 연동 시 필수 -데이터 베이스 연결 객체 -->
+<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource" name="dataSource">
+	<property value="com.mysql.jdbc.Driver" name="driverClassName" />
+	<property value="jdbc:mysql://localhost:3306/myproject01" name="url" />
+	<property value="root" name="username" />
+	<property value="12345" name="password" />
+</bean>
+
+<!-- MyBatis 사용을 위한 bean코드를 작성 -->
+<bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory">
+	<property name="dataSource" ref="dataSource" />         <!-- 위의 dataSource와 맞는지 -->
+	<property value="classpath:/mappers/*.xml" name="mapperLocations" />     <!-- 디렉토리확인 -->
+</bean>
+
+<!-- mybatis-spring에서 제공하는 SqlSessionTemplate은 MyBatis의 SqlSession 인터페이스를 구현한 클래스로
+	기본적인 트랜잭션의 관리나 쓰레드 처리의 안정성 등을 보장해 주고 데이터베이스의 연결과 종료를 책임진다.
+	SqlSessionTemplate은 SqlSessionFactory를 생성자로 주입해서 설정한다. -->
+<bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSession" destroy-method="clearCache">
+	<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
+</bean>
+
+<!-- 패키지를 자동으로 인식하기 위한 <context:component-scan>사용 -->
+<context:component-scan base-package="com.mypro01.dao" />
+
+<!-- 트랜잭션 사용 -->
+<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+  <property name="dataSource" ref="dataSource"></property>
+</bean>
+ 
+<tx:annotation-driven />
+
+<aop:config></aop:config>
+
+</beans>

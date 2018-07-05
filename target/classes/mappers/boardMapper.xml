@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BoardMapper">
+
+<insert id="write" parameterType="com.mypro01.vo.BoardVO">
+	insert into board(title,content,writer) values(#{title},#{content},#{writer})
+</insert>
+
+<select id="read" resultType="com.mypro01.vo.BoardVO">
+	select * from board where bno=#{bno}
+</select>
+
+<update id="readCnt">
+	update board set viewcnt = viewcnt+1 where bno=#{bno}
+</update>
+
+<update id="update">
+	update board set title=#{title}, content=#{content} where bno=#{bno}
+</update>
+
+<delete id="delete">
+	delete from board where bno=#{bno}
+</delete>
+
+<select id="listPage" resultType="com.mypro01.vo.BoardVO">
+	select * from board where bno > 0 order by bno desc, regdate desc limit #{pageStart}, #{perPageNum}
+</select>
+
+<select id="countPaging" resultType="int">
+	select count(bno) from board where bno > 0
+</select>
+
+<!-- 파일첨부 정보 저장 -->
+<!-- <insert id="addAttach" useGeneratedKeys="true" keyProperty="bno" parameterType="com.mypro01.vo.BoardVO">
+	<selectKey resultType="int" keyProperty="bno" order="BEFORE">
+			SELECT LAST_INSERT_ID()
+	</selectKey>
+	insert into attach(fullName,bno) values(#{fullName},#{bno})
+</insert>  -->
+<insert id="addAttach">
+	insert into attach(fullName, bno) values(#{fullName}, bno)
+</insert>
+<!-- <insert id="addAttach" parameterType="com.mypro01.vo.BoardVO">
+	<selectKey resultType="int" keyProperty="bno" order="BEFORE">
+		SELECT LAST_INSERT_ID()
+	</selectKey>
+	INSERT INTO attach(fullName, bno) values (#{fullName},#{bno})
+</insert>
+ -->
+<!-- <insert id="addAttach">
+  INSERT INTO attach(fullName,bno) values(#{fullName},LAST_INSERT_ID())
+</insert> -->
+<!-- <insert id="addAttach" parameterType="com.mypro01.vo.BoardVO">
+	INSERT INTO attach
+	<set>
+		fullName = #{fullName},
+		bno = #{bno},
+	</set>
+	<selectKey resultType="int" keyProperty="bno" order="AFTER">
+		SELECT LAST_INSERT_ID()
+	</selectKey>
+</insert> -->
+ 
+ 
+<!-- 첨부파일 정보 가져오기 -->
+<select id="getAttach" resultType="string">
+	select fullName from attach where bno = #{bno} order by regdate
+</select>
+</mapper>

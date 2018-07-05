@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberMapper">
+	<!-- signup -->
+	<insert id="insertMember" parameterType="com.mypro01.vo.SignupVO">
+		insert into user(userid,userpwd,username,email,addr1,addr2,addr3)
+		values(#{userid},#{userpwd},#{username},#{email},#{addr1},#{addr2},#{addr3})
+	</insert>
+	
+	<!-- ID check -->
+	<select id="checkId" resultType="int">
+		select count(*) from user where userid = #{userid}
+	</select>
+	
+	<!-- login -->
+	<select id="login" resultType="com.mypro01.vo.SignupVO">
+		select userid, userpwd, username from user where userid=#{userid} and userpwd=#{userpwd}
+	</select>
+	
+	<update id="keepLogin">
+		update user set sessionkey=#{sessionid}, sessionlimit=#{next} where userid=#{userid}
+	</update>
+	<select id="checkUserSessionKey" resultType="com.mypro01.vo.SignupVO">
+		select * from user where sessionkey = #{value} and sessionlimit > now()
+	</select>
+</mapper>

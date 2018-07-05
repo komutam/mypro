@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	<context:component-scan base-package="com.mypro01.*" />
+	
+	<!-- Controller가 처리하지 않으면 WAS(지금의 경우 톰캣8)가 처리하도록 설정 -->
+    <default-servlet-handler/>
+    
+    <!-- login interceptor -->
+	<beans:bean id="LoginInterceptor" class="com.mypro01.interceptor.LoginInterceptor"></beans:bean>
+	<beans:bean id="AuthInterceptor" class="com.mypro01.interceptor.AuthInterceptor"></beans:bean>
+	
+	<interceptors>
+		<interceptor>
+			<mapping path="/member/loginPost"/>
+			<beans:ref bean="LoginInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/board/writePage" />
+			<mapping path="/board/modifyPage" />
+			<beans:ref bean="AuthInterceptor" />
+		</interceptor>
+	</interceptors>
+	
+	<!-- 파일업로드를 위한 객체의 설정 -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+  		<beans:property name="maxUploadSize" value="10485760"></beans:property>
+	</beans:bean><!-- property 중에서 maxUploadSize 속성은 파일 업로드의 크기를 제한하고 10485760은 파일에서 10MB 정도의 크기 -->
+	<!-- 파일업로드 할 경로 설정 --><!-- uploadPath라는 id를 가진 문자열이 스프링의 빈으로 설정되었으므로 이걸 Controller에서 사용하면 됨 -->
+	<beans:bean id="uploadPath" class="java.lang.String">
+		<beans:constructor-arg value="D:\\Files">
+	</beans:constructor-arg>
+</beans:bean>
+	
+</beans:beans>
