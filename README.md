@@ -1,16 +1,16 @@
 ## mypro
 
-### プロジェクト
+### 프로젝트
 		 
-* Spring掲示板
+* Spring 게시판
 		 
-### 概要
+### 개요
 
-* interceptorを利用したログイン及びSpring掲示板
+* 인터셉터를 이용한 로그인 및 Spring 게시판
 		 
-### 貢献した内容
+### 공헌한 내용
  	
- * 個人プロジェクト
+ * 개인프로젝트
 		
  * JAVA, Spring, MyBatis, JSP, JSTL, EL
 		
@@ -19,4 +19,4 @@
  * STS(Spring Tool Suite), Apache Tomcat v8.0, MySQL
  
  ### portfolio ppt link
- https://www.slideshare.net/ssuser25d7ff/jhs-portfolio
+ https://www.slideshare.net/ssuser25d7ff/jang-hyun-su-portfolio-ppt
