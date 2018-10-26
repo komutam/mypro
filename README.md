@@ -26,8 +26,8 @@
 				
  * STS(Spring Tool Suite), Apache Tomcat v8.0, MySQL
  
- ### portfolio ppt link
- https://www.slideshare.net/ssuser25d7ff/jang-hyun-su-portfolio-ppt
+### portfolio ppt link
+https://www.slideshare.net/ssuser25d7ff/spring-portfolio-120844112 
 
 
 
